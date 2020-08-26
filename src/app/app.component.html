@@ -1,0 +1,55 @@
+﻿<div class="container">
+    <h1 style="font-weight: bold;">Awesome Bike Rental</h1>
+    <br>
+    <h4 style="font-weight: bold;"> &#129297; Create new rent </h4>
+    <table class="col-sm-12">
+        <tbody>
+            <tr>
+                <td class="col-sm-4">
+                    <label for="name">Bike name</label>
+                    <input class="form-control" id ="name" [(ngModel)]="name" placeholder="Name" />
+                </td>
+                <td class="col-sm-4">
+                    <label for="name">Bike type</label>
+                    <input class="form-control" id="type" list="typesOfbikes" [(ngModel)]="type" placeholder="Custom" />
+                    <datalist id="typesOfbikes">
+                        <option value="Racing">
+                        <option value="Mountain">
+                    </datalist>
+                </td>
+                <td class="col-sm-2">
+                    <label for="price">Bike price</label>
+                    <input type="number" class="form-control" id="price" [(ngModel)]="price" min="0.0" max="100" step="0.5" />
+                </td>
+                <td class="col-sm-2">
+                    <label for="submit"></label>
+                    <button class="btn btn-success btn-sm btn-block" id="submit" (click)="addItem(name, type, price)">Submit rent</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br><br><br><br>
+    <h4 style="font-weight: bold;"> &#129321; Your rent (Total: {{calculateTotalSum() | currency}}) </h4>
+    <table class="table table-hover">
+        <tbody>
+            <tr *ngFor="let item of itemsAreRenting">
+                <td class="col-sm-10">{{item.bicycleName}} &#47; {{item.bikeType}} &#47; {{item.price | currency}}</td>
+                <td class="col-sm-2"><button class="btn btn-danger btn-sm btn-block" (click)="cuncelRent(item)">Cancel rent</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 style="font-weight: bold;"> &#x1f6b2; Available bicycles ({{itemsForRent.length}}) </h4>
+    <table class="table table-hover">
+        <tbody>
+            <tr *ngFor="let item of itemsForRent">
+                <td class="col-sm-8">{{item.bicycleName}} &#47; {{item.bikeType}} &#47; {{item.price | currency}}</td>
+                <td class="col-sm-2"><button class="btn btn-primary btn-sm btn-block" (click)="rentItem(item)">Rent</button></td>
+                <td class="col-sm-2"><button class="btn btn-danger btn-sm btn-block" (click)="deleteItem(item)">Delete</button></td>
+            </tr>
+        </tbody> 
+    </table>
+</div>
+
+
+
+
