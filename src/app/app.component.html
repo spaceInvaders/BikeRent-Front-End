@@ -44,7 +44,7 @@
             <tr *ngFor="let bike of bikesForRent">
                 <td class="col-sm-8">{{bike.bicycleName}} &#47; {{bike.bikeType}} &#47; {{bike.price|currency}}</td>
                 <td class="col-sm-2"><button class="btn btn-primary btn-sm btn-block" (click)="changeStatus(bike, 'isRenting')">Rent</button></td>
-                <td class="col-sm-2"><button class="btn btn-danger btn-sm btn-block" (click)="initStart()">Delete</button></td>
+                <td class="col-sm-2"><button class="btn btn-danger btn-sm btn-block" (click)="deleteBike(bike)">Delete</button></td>
             </tr>
         </tbody>
     </table>

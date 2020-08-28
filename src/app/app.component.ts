@@ -70,6 +70,16 @@ export class AppComponent implements OnInit
                 });
     }
 
+    deleteBike(bike: Bicycle)
+    {
+        this.service
+            .deleteBike(bike.id)
+            .subscribe(response =>
+            {
+                this.loadBicycles("free");
+            });
+    }
+
     private updateStatus(bikeFromServer: Bicycle)
     {
         let arrayMoveFrom: Bicycle[];
@@ -100,7 +110,8 @@ export class AppComponent implements OnInit
     calculateTotalSum(): string
     {
         let totalSum: number = 0;
-        for (let index = 0; index < this.bikesAreRenting.length; index++) {
+        for (let index = 0; index < this.bikesAreRenting.length; index++)
+        {
             totalSum += this.bikesAreRenting[index].price;
         }
         return totalSum.toPrecision(4);
