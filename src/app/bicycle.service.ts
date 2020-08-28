@@ -12,13 +12,16 @@ export class BicycleService
     // READ
     getBicycles(status: string)
     {
-        if (status == "free")
+        const free: string = "free";
+        const isRenting: string = "isRenting";
+
+        if (status == free)
         {
-            return this.http.get(this.url + "/free");
+            return this.http.get(this.url + "/" + free);
         }
-        else if (status == "isRenting")
+        else if (status == isRenting)
         {
-            return this.http.get(this.url + "/isRenting");
+            return this.http.get(this.url + "/" + isRenting);
         }
         else { return; }
     }
