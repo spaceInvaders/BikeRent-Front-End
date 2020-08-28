@@ -40,7 +40,7 @@ export class AppComponent implements OnInit
                 });
     }
 
-    private createBike(name: string, type: string, price: number)
+    createBike(name: string, type: string, price: number)
     {
         if (name == null || name.trim() == "" || price == null || type == null)
             return; 
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit
                 });
     }
 
-    private changeStatus(bike: Bicycle, changeToStatus: string)
+    changeStatus(bike: Bicycle, changeToStatus: string)
     {
         let editedBike: Bicycle = bike;
         editedBike.status = changeToStatus;
@@ -70,7 +70,7 @@ export class AppComponent implements OnInit
                 });
     }
 
-    private deleteBike(bike: Bicycle)
+    deleteBike(bike: Bicycle)
     {
         this.service
             .deleteBike(bike.id)
@@ -107,7 +107,7 @@ export class AppComponent implements OnInit
         }
     }
 
-    private calculateTotalSum(): string
+    calculateTotalSum(): string
     {
         let totalSum: number = 0;
         for (let index = 0; index < this.bikesAreRenting.length; index++)
