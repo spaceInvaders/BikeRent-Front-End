@@ -5,28 +5,28 @@ import { Bicycle } from './bicycle';
 @Injectable()
 export class BicycleService
 {
-    private url = "http://localhost:63333/api/bicycles";
+    private url = "https://localhost:44368/api/bicycles";
     constructor(private http: HttpClient)
     { }
 
-    getBicycles() {
-        return this.http.get(this.url);
+    // READ
+    getBicycles(status: string)
+    {
+        if (status == "free")
+        {
+            return this.http.get(this.url + "/free");
+        }
+        else if (status == "isRenting")
+        {
+            return this.http.get(this.url + "/isRenting");
+        }
+        else { return; }
     }
 
-    createBicycle(bicycle: Bicycle)
+    // CREATE
+    saveBikeToDb(bike: Bicycle)
     {
         const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
-        return this.http.post(this.url, JSON.stringify(bicycle), { headers: myHeaders });
-    }
-
-    updateBicycle(id: number, bicycle: Bicycle)
-    {
-        const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
-        return this.http.put(this.url, JSON.stringify(bicycle), { headers: myHeaders });
-    }
-
-    deleteBicycle(id: number)
-    {
-        return this.http.delete(this.url + '/' + id);
+        return this.http.post(this.url, JSON.stringify(bike), { headers: myHeaders });
     }
 }

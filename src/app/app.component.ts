@@ -7,72 +7,61 @@ import { BicycleService } from './bicycle.service';
     templateUrl: `./app.component.html`,
     providers: [BicycleService]
 })
-export class AppComponent implements OnInit {
-
-   
+export class AppComponent implements OnInit
+{
     name: string;
     type: string;
     price: number = 12;
+    bikesForRent: Array<Bicycle>;
+    bikesAreRenting: Array<Bicycle>;
 
-    itemsForRent: Bicycle[] =
-        [
-            new Bicycle("SuperFast bicycle", "Racing", 12.99, "free"),
-            new Bicycle("Awesome bicycle", "Racing", 17.99, "free"),
-            new Bicycle("ThunderStorm bicycle", "Mountain", 28.99, "free"),
-        ];
+    constructor(private service: BicycleService)
+    {
+        this.bikesForRent = new Array<Bicycle>();
+        this.bikesAreRenting = new Array<Bicycle>();
+    }
 
-    itemsAreRenting: Bicycle[] =
-        [
-            new Bicycle("SuperFast bicycle", "Custom", 12.99, "isRenting")
-        ];
+    ngOnInit(): void
+    {
+        this.loadBicycles("free");
+        this.loadBicycles("isRenting");
+    }
 
-    calculateTotalSum(): string {
+    private loadBicycles(status: string)
+    {
+        this.service
+            .getBicycles(status)
+            .subscribe(
+                (responceFromServer: Bicycle[]) =>
+                {
+                    if (status == "free") { this.bikesForRent = responceFromServer; }
+                    else if (status == "isRenting") { this.bikesAreRenting = responceFromServer; }
+                    else (console.log("loadBicycles: wrong status"))
+                });
+    }
+
+    createBike(name: string, type: string, price: number)
+    {
+;       if (name == null || name.trim() == "" || price == null || type == null)
+            return; 
+
+        let newBike: Bicycle = new Bicycle(name, type, price, "free");
+
+        this.service
+            .saveBikeToDb(newBike)
+            .subscribe(
+                (bikeFromServer: Bicycle) =>
+                {
+                    this.bikesForRent.push(bikeFromServer);
+                });
+    }
+
+    calculateTotalSum(): string
+    {
         let totalSum: number = 0;
-        for (let index = 0; index < this.itemsAreRenting.length; index++) {
-            totalSum += this.itemsAreRenting[index].price;
+        for (let index = 0; index < this.bikesAreRenting.length; index++) {
+            totalSum += this.bikesAreRenting[index].price;
         }
         return totalSum.toPrecision(4);
-    }
-
-    addItem(name: string, type: string, price: number): void {
-        if (name == null || name.trim() == "" || price == null || type == null || status == null)
-            return;
-        this.itemsForRent.push(new Bicycle(name + " bicycle", type, price, "free"));
-    }
-
-    deleteItem(item: Bicycle): void {
-
-        for (let index = 0; index < this.itemsForRent.length; index++) {
-            if (item.bicycleName == this.itemsForRent[index].bicycleName
-                && item.bikeType == this.itemsForRent[index].bikeType
-                && item.price == this.itemsForRent[index].price) {
-                this.itemsForRent.splice(index, 1);
-                break;
-            }
-        }
-    }
-
-    rentItem(item: Bicycle): void {
-        for (let index = 0; index < this.itemsForRent.length; index++) {
-            if (item.bicycleName == this.itemsForRent[index].bicycleName
-                && item.bikeType == this.itemsForRent[index].bikeType
-                && item.price == this.itemsForRent[index].price) {
-                let itemIsRenting: Bicycle[] = this.itemsForRent.splice(index, 1);
-                this.itemsAreRenting.push(itemIsRenting[0]);
-                break;
-            }
-        }
-    }
-
-    cuncelRent(item: Bicycle): void {
-        for (let index = 0; index < this.itemsAreRenting.length; index++) {
-            if (item.bicycleName == this.itemsAreRenting[index].bicycleName
-                && item.bikeType == this.itemsAreRenting[index].bikeType
-                && item.price == this.itemsAreRenting[index].price) {
-                let itemIsFreeForRent: Bicycle[] = this.itemsAreRenting.splice(index, 1);
-                this.itemsForRent.push(itemIsFreeForRent[0]);
-                break;
-            }
-        }
     }
 }
