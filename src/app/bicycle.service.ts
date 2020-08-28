@@ -29,4 +29,16 @@ export class BicycleService
         const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
         return this.http.post(this.url, JSON.stringify(bike), { headers: myHeaders });
     }
+
+    // // UPDATE
+    updateBike(bike: Bicycle)
+    {
+        const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
+        return this.http.put(this.url, JSON.stringify(bike), { headers: myHeaders });
+    }
+
+    deleteBike(id: number)
+    {
+        return this.http.delete(this.url + "/" + id);
+    }
 }

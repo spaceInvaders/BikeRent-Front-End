@@ -42,7 +42,7 @@ export class AppComponent implements OnInit
 
     createBike(name: string, type: string, price: number)
     {
-;       if (name == null || name.trim() == "" || price == null || type == null)
+        if (name == null || name.trim() == "" || price == null || type == null)
             return; 
 
         let newBike: Bicycle = new Bicycle(name, type, price, "free");
@@ -54,6 +54,47 @@ export class AppComponent implements OnInit
                 {
                     this.bikesForRent.push(bikeFromServer);
                 });
+    }
+
+    changeStatus(bike: Bicycle, changeToStatus: string)
+    {
+        let editedBike: Bicycle = bike;
+        editedBike.status = changeToStatus;
+
+        this.service
+            .updateBike(editedBike)
+            .subscribe(
+                (bikeFromServer: Bicycle) =>
+                {
+                    this.updateStatus(bikeFromServer);
+                });
+    }
+
+    private updateStatus(bikeFromServer: Bicycle)
+    {
+        let arrayMoveFrom: Bicycle[];
+        let arrayMoveTo: Bicycle[];
+
+        if (bikeFromServer.status == "isRenting")
+        {
+            arrayMoveFrom = this.bikesForRent;
+            arrayMoveTo = this.bikesAreRenting;
+        }
+        else if (bikeFromServer.status == "free")
+        {
+            arrayMoveFrom = this.bikesAreRenting;
+            arrayMoveTo = this.bikesForRent;
+        }
+        else { return; }
+
+        for (let index = 0; index < arrayMoveFrom.length; index++)
+        {
+            if (arrayMoveFrom[index].id == bikeFromServer.id)
+            {
+                let bikeToMove: Bicycle = (arrayMoveFrom.splice(index, 1))[0];
+                arrayMoveTo.push(bikeToMove);
+            }
+        }
     }
 
     calculateTotalSum(): string
